@@ -13,7 +13,7 @@ namespace DBPacientes_EXO.Data.Entities
 
         public string LesionType { get; set; }
 
-        public string BodyPart { get; set }
+        public string BodyPart { get; set; }
 
 
 
