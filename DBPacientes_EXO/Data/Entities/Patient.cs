@@ -1,6 +1,7 @@
 ﻿namespace DBPacientes_EXO.Data.Entities
 {
-    public class Patient 
+    public class Patient : User
     {
+
     }
 }
