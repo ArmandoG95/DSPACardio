@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DBPacientes_EXO.Data
 {
-    public class DataContext: IdentityDbContext <CUser>
+    public class DataContext: IdentityDbContext <User>
     {
         public DataContext(DbContextOptions<DataContext>options):base(options)
         {
