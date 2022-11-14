@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DBPacientes_EXO.Data.Entities
 {
-    public class Lesiones
+    public class Injury
     {
         public int Id { get; set; }
         public DateTime AccidentDate { get; set; }

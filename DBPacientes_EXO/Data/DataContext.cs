@@ -6,6 +6,12 @@ namespace DBPacientes_EXO.Data
 {
     public class DataContext: IdentityDbContext <User>
     {
+        public DbSet<Injury> Injuries { get; set; }
+        public DbSet<Patient> Patients { get; set; }
+
+        public DbSet<Gender> Genders { get; set; }
+        public DbSet<Treatment> Treatments { get; set; }
+        
         public DataContext(DbContextOptions<DataContext>options):base(options)
         {
 

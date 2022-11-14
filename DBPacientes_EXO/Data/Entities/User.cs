@@ -6,7 +6,7 @@ namespace DBPacientes_EXO.Data.Entities
 {
     public class User: IdentityUser
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required (ErrorMessage= "{0} Es obligatorio.")]
         [MaxLength(50, ErrorMessage ="El Nombre {0} no puede tener mas de {1} caracteres.")]

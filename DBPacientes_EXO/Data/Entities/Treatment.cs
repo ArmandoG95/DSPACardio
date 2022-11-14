@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace DBPacientes_EXO.Data.Entities
 {
-    public class Tratamiento
+    public class Treatment
     {
         public int Id{ get; set; }
-        public string Treatment { get; set; }
+        public string PatientTreatment { get; set; }
 
         public string ExosqueletonType { get; set; }
     }
