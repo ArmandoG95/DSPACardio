@@ -1,0 +1,53 @@
+﻿@model IEnumerable<DBPacientes_EXO.Data.Entities.Injury>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lesión </h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AccidentDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccidentSite)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LesionType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BodyPart)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccidentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccidentSite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LesionType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BodyPart)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -6,8 +6,7 @@ namespace DBPacientes_EXO.Data.Entities
 {
     public class User: IdentityUser
     {
-        public int Id { get; set; }
-
+        
         [Required (ErrorMessage= "{0} Es obligatorio.")]
         [MaxLength(50, ErrorMessage ="El Nombre {0} no puede tener mas de {1} caracteres.")]
         [Display(Name ="Nombre")]
@@ -27,8 +26,6 @@ namespace DBPacientes_EXO.Data.Entities
         public override string Email { get; set; }
 
         public string FullName => $"{FirtsName}{LastName}";
-
-        
 
     }
 }
