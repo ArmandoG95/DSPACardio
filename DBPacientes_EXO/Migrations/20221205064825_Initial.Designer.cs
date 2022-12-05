@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DBPacientes_EXO.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221115002936_Initial")]
+    [Migration("20221205064825_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,64 @@ namespace DBPacientes_EXO.Migrations
                 .HasAnnotation("ProductVersion", "3.1.30")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("DBPacientes_EXO.Data.Entities.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+                });
+
+            modelBuilder.Entity("DBPacientes_EXO.Data.Entities.Consult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ConsultaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConsultaId");
+
+                    b.ToTable("Consults");
+                });
+
+            modelBuilder.Entity("DBPacientes_EXO.Data.Entities.Diagnosis", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("DiagnosisId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("datetime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DiagnosisId");
+
+                    b.ToTable("Diagnosis");
+                });
 
             modelBuilder.Entity("DBPacientes_EXO.Data.Entities.Gender", b =>
                 {
@@ -67,12 +125,20 @@ namespace DBPacientes_EXO.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("MyUserId")
+                    b.Property<int?>("GenderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MyUserId");
+                    b.HasIndex("GenderId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Patients");
                 });
@@ -84,6 +150,12 @@ namespace DBPacientes_EXO.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("ConsultId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DiagnosisId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ExosqueletonType")
                         .HasColumnType("nvarchar(max)");
 
@@ -91,6 +163,10 @@ namespace DBPacientes_EXO.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ConsultId");
+
+                    b.HasIndex("DiagnosisId");
 
                     b.ToTable("Treatments");
                 });
@@ -117,7 +193,7 @@ namespace DBPacientes_EXO.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirtsName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
@@ -314,11 +390,40 @@ namespace DBPacientes_EXO.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("DBPacientes_EXO.Data.Entities.Consult", b =>
+                {
+                    b.HasOne("DBPacientes_EXO.Data.Entities.Consult", "Consulta")
+                        .WithMany()
+                        .HasForeignKey("ConsultaId");
+                });
+
+            modelBuilder.Entity("DBPacientes_EXO.Data.Entities.Diagnosis", b =>
+                {
+                    b.HasOne("DBPacientes_EXO.Data.Entities.Diagnosis", null)
+                        .WithMany("Diagnositcos")
+                        .HasForeignKey("DiagnosisId");
+                });
+
             modelBuilder.Entity("DBPacientes_EXO.Data.Entities.Patient", b =>
                 {
-                    b.HasOne("DBPacientes_EXO.Data.Entities.User", "MyUser")
+                    b.HasOne("DBPacientes_EXO.Data.Entities.Gender", "Gender")
+                        .WithMany("Patients")
+                        .HasForeignKey("GenderId");
+
+                    b.HasOne("DBPacientes_EXO.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("MyUserId");
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("DBPacientes_EXO.Data.Entities.Treatment", b =>
+                {
+                    b.HasOne("DBPacientes_EXO.Data.Entities.Consult", null)
+                        .WithMany("Tratamientos")
+                        .HasForeignKey("ConsultId");
+
+                    b.HasOne("DBPacientes_EXO.Data.Entities.Diagnosis", "Diagnosis")
+                        .WithMany()
+                        .HasForeignKey("DiagnosisId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

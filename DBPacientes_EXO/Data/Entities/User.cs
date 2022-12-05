@@ -10,7 +10,7 @@ namespace DBPacientes_EXO.Data.Entities
         [Required (ErrorMessage= "{0} Es obligatorio.")]
         [MaxLength(50, ErrorMessage ="El Nombre {0} no puede tener mas de {1} caracteres.")]
         [Display(Name ="Nombre")]
-        public string FirtsName { get; set; }
+        public string FirstName { get; set; }
 
         [Required(ErrorMessage = "{0} Es obligatorio.")]
         [MaxLength(50, ErrorMessage = "El Apellido {0} no puede tener mas de {1} caracteres.")]
@@ -25,7 +25,7 @@ namespace DBPacientes_EXO.Data.Entities
         public override string PhoneNumber { get; set; }
         public override string Email { get; set; }
 
-        public string FullName => $"{FirtsName}{LastName}";
+        public string FullName => $"{FirstName}{LastName}";
 
     }
 }

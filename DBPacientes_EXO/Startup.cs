@@ -1,5 +1,6 @@
 using DBPacientes_EXO.Data;
 using DBPacientes_EXO.Data.Entities;
+using DBPacientes_EXO.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,10 +40,18 @@ namespace DBPacientes_EXO
             })
             .AddEntityFrameworkStores<DataContext>();
 
+
+
             services.AddDbContext<DataContext>(cfg =>
             {
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddTransient<Seeder>();
+            //Inyeccion de dependencias es cuando un cliente hace una solicitud
+            services.AddScoped<IUserHelper,UserHelper>();
+            //este es para los comboBox
+            services.AddScoped<ICombosHelper, CombosHelpers>();
+
             services.AddControllersWithViews();
 
         }

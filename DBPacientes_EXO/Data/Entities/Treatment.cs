@@ -11,5 +11,9 @@ namespace DBPacientes_EXO.Data.Entities
         public string PatientTreatment { get; set; }
 
         public string ExosqueletonType { get; set; }
+
+        public Diagnosis Diagnosis { get; set; }
+
+
     }
 }

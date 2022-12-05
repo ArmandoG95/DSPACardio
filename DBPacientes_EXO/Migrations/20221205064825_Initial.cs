@@ -8,6 +8,20 @@ namespace DBPacientes_EXO.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Admins",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Admins", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -38,7 +52,7 @@ namespace DBPacientes_EXO.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FirtsName = table.Column<string>(maxLength: 50, nullable: false),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: false),
                     Birthday = table.Column<DateTime>(nullable: false),
                     Street = table.Column<string>(nullable: true),
@@ -50,6 +64,46 @@ namespace DBPacientes_EXO.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Consults",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    ConsultaId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Consults", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Consults_Consults_ConsultaId",
+                        column: x => x.ConsultaId,
+                        principalTable: "Consults",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Diagnosis",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    datetime = table.Column<DateTime>(nullable: false),
+                    DiagnosisId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Diagnosis", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Diagnosis_Diagnosis_DiagnosisId",
+                        column: x => x.DiagnosisId,
+                        principalTable: "Diagnosis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,20 +133,6 @@ namespace DBPacientes_EXO.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Injuries", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Treatments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PatientTreatment = table.Column<string>(nullable: true),
-                    ExosqueletonType = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Treatments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,19 +242,55 @@ namespace DBPacientes_EXO.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Treatments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PatientTreatment = table.Column<string>(nullable: true),
+                    ExosqueletonType = table.Column<string>(nullable: true),
+                    DiagnosisId = table.Column<int>(nullable: true),
+                    ConsultId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Treatments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Treatments_Consults_ConsultId",
+                        column: x => x.ConsultId,
+                        principalTable: "Consults",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Treatments_Diagnosis_DiagnosisId",
+                        column: x => x.DiagnosisId,
+                        principalTable: "Diagnosis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Patients",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MyUserId = table.Column<string>(nullable: true)
+                    Nombre = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    GenderId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Patients", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Patients_AspNetUsers_MyUserId",
-                        column: x => x.MyUserId,
+                        name: "FK_Patients_Genders_GenderId",
+                        column: x => x.GenderId,
+                        principalTable: "Genders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Patients_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -260,13 +336,41 @@ namespace DBPacientes_EXO.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Patients_MyUserId",
+                name: "IX_Consults_ConsultaId",
+                table: "Consults",
+                column: "ConsultaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Diagnosis_DiagnosisId",
+                table: "Diagnosis",
+                column: "DiagnosisId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_GenderId",
                 table: "Patients",
-                column: "MyUserId");
+                column: "GenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_UserId",
+                table: "Patients",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Treatments_ConsultId",
+                table: "Treatments",
+                column: "ConsultId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Treatments_DiagnosisId",
+                table: "Treatments",
+                column: "DiagnosisId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Admins");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -283,9 +387,6 @@ namespace DBPacientes_EXO.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Genders");
-
-            migrationBuilder.DropTable(
                 name: "Injuries");
 
             migrationBuilder.DropTable(
@@ -298,7 +399,16 @@ namespace DBPacientes_EXO.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Genders");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Consults");
+
+            migrationBuilder.DropTable(
+                name: "Diagnosis");
         }
     }
 }
